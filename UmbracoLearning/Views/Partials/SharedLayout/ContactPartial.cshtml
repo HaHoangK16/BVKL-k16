@@ -1,0 +1,71 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+<div class="inner">
+    <header>
+        <h2>Hỗ trợ khách hàng</h2>
+    </header>
+    @using (Html.BeginUmbracoForm("HandleSubmitForm", "Contact", FormMethod.Post, htmlAttributes: new { @id = "registration" }))
+    {
+        <div class="field half first">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" />
+        </div>
+        <div class="field half">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" />
+        </div>
+        <div class="field">
+            <label for="message">Message</label>
+            <textarea name="message" id="message" rows="6"></textarea>
+        </div>
+        <ul class="actions">
+            <li><input type="submit" value="Send Message" class="alt" /></li>
+        </ul>
+    }
+</div>
+
+
+<script type="text/javascript">
+        $().ready(function (){
+            $("#registration").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 5
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 500
+                    },
+                },
+
+                messages: {
+                    name: {
+                        required: "Please enter your name",
+                        minlength: "Your name must be at least 5 characters long"
+                    },
+                    email: {
+                        required: "Please enter a vaild email address",
+                        email: "Please enter a vaild email address"
+                    },
+                    message: {
+                        required: "Please enter your message",
+                        minlength: "Your email must be at least 10 characters long",
+                        maxlength: "Your email must be less than 500 characters long"
+                    },
+                },
+
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            })
+        });
+</script>
+
+
+

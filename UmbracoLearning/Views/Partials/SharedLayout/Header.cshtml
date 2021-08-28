@@ -1,0 +1,46 @@
+﻿@using UmbracoLearning.Models;
+@using Umbraco.Web.Models;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<List<NavigationList>>
+
+<header id="header">
+    <div class="inner">
+        <a href="@Umbraco.AssignedContentItem.Value("logoLink")" class="logo">Tourist town</a>
+        <nav id="nav">
+        
+            @RenderSubItems(Model)
+        
+        </nav>
+    </div>
+</header>
+
+@helper RenderSubItems(List<NavigationList> listItems)
+{
+    if (listItems != null)
+    {
+        foreach (var item in listItems)
+        {
+            
+                <a href="@item.Link.Url" target="@item.Link.Target">@item.Link.Text</a>
+                if (item.HasSubNavigation)
+                {
+                    
+                        @RenderSubItems(item.NavItems)
+                    
+                }
+            
+        }
+    }
+}
+
+
+
+@*<header id="header">
+        <div class="inner">
+            <a href="/home" class="logo">introspect</a>
+            <nav id="nav">
+    <a href="/home">Home</a>
+        <a href="/generic">Generic</a>
+        <a href="/elements">Elements</a>
+    </nav>
+        </div>
+    </header>*@

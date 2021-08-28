@@ -1,0 +1,80 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+
+<h3>Drop Us a Message</h3>
+@using (Html.BeginUmbracoForm("HandleSubmitCommentForm", "Comments", FormMethod.Post, htmlAttributes: new { @id = "commform" }))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" name="txtName" id="txtName" class="form-control" placeholder="Your Name *" value="" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="txtEmail" id="txtEmail" class="form-control" placeholder="Your Email *" value="" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="txtPhone" id="txtPhone" class="form-control" placeholder="Your Phone Number *" value="" />
+            </div>
+            <div class="form-group">
+                <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <textarea name="txtMsg" id="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script type="text/javascript">
+        $().ready(function (){
+            $("#commform").validate({
+                rules: {
+                    txtName: {
+                        required: true,
+                        minlength: 5
+                    },
+                    txtEmail: {
+                        required: true,
+                        email: true
+                    },
+                    txtPhone: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 10
+                    },
+                    txtMsg: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 500
+                    },
+                },
+
+                messages: {
+                    txtName: {
+                        required: "Please enter your name",
+                        minlength: "Your name must be at least 5 characters long"
+                    },
+                    txtEmail: {
+                        required: "Please enter a vaild email address",
+                        email: "Please enter a vaild email address"
+                    },
+                    txtPhone: {
+                        required: "Please enter your phone number"
+                    },
+                    txtMsg: {
+                        required: "Please enter your message",
+                        minlength: "Your email must be at least 10 characters long",
+                        maxlength: "Your email must be less than 500 characters long"
+                    },
+                },
+
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            })
+        });
+</script>

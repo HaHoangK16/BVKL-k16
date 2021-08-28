@@ -1,0 +1,115 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@{
+    Layout = "WebbaseTemplate.cshtml";
+}
+
+@* the fun starts here *@
+
+@{
+    var pageSize = 3;
+    var page = 1;
+    int.TryParse(Request.QueryString["page"], out page);
+    string keyword = Request.QueryString["keyword"];
+    IPublishedContent CurrentPage = Model;
+    var NewsList = CurrentPage.Children();
+
+    if (!String.IsNullOrEmpty(keyword))
+    {
+        var arr = keyword.Split('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '`'
+                , '~', '/', '{', '}', '|', '[', ']', ';', ':', '<', '>', '?', ',', '.', '"');
+        foreach (var item in arr)
+        {
+            NewsList = NewsList.Where(s => s.Name.ToLower().Contains(item.ToLower()));
+        }
+
+    }
+
+    var totalPages = (int)Math.Ceiling((double)NewsList.Count() / (double)pageSize);
+    NewsList = NewsList.Skip((page - 1) * pageSize).Take(pageSize);
+
+
+    if (page > totalPages)
+    {
+        page = totalPages;
+    }
+    else if (page < 1)
+    {
+        page = 1;
+
+    }
+}
+
+
+<div class="col-md-8 offset-md-2">
+    <div id="nbc-searchsimple1" style="">
+        <form action="" method="get" id="nbc-searchsimplebox1">
+            <input name="keyword" class="searchText" id="searchsimpleinput1" placeholder="Search this site..." type="text" value="@keyword" /><br />
+            <input id="nbc-searchsimplesubmit1" class="btn btn-primary" type="submit" value="Search" />
+        </form>
+    </div>
+</div>
+
+
+    <div>
+        <section id="one">
+            @if (NewsList.Count() > 0)
+            {
+                foreach (var news in NewsList)
+                {
+                    <div class="inner" style="width:70% !important">
+                        <div class="content" style="width:100% !important">
+                            <header>
+                                <h3><a href="@news.Url">@news.Value("newsTitle")</a></h3>
+                            </header>
+                            <div class="image fit">
+                                <img src="@news.Value("newsImage")" alt="" />
+                            </div>
+                            <p>
+                                @news.Value("shortContent")
+                            </p>
+                        </div>
+                    </div>
+
+                }
+            }
+            else
+            {
+                <div class="lb-overlay-wrapper" style=" word-break: break-word; word-wrap: break-word; color: #777; padding: 0; font-size: 100%; font: inherit; vertical-align: baseline; background: #f8f9f5; border: 5px solid #f4f5f1; border-radius: 5px; margin-bottom: 30px; position: relative; text-align: center; ">
+                    <div class="error-404-sub-title">
+                        <h1>Xin lỗi, Bài viết bạn đang tìm kiếm không tồn tại</h1>
+                    </div>
+                    <div class="error-404-sub-sub-title">
+                        Bạn có thể về lại
+                        <a href="https://localhost:44324/vn/news/">
+                            News
+                        </a>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+
+@if (totalPages > 1)
+{
+    <div>
+        <div class="col-12">
+            <ul class="pagination pagination-warning justify-content-center">
+                @if (page > 1)
+                {
+                    <li class="page-item"><a class="page-link" href="?page=@(page-1)&keyword=@keyword">Previous</a></li>
+                }
+                @for (int p = 1; p < totalPages + 1; p++)
+                {
+                    <li class="page-item @(p == page ? "active" : string.Empty)">
+                        <a class="page-link" href="?page=@p&keyword=@keyword">@p</a>
+                    </li>
+                }
+                @if (page < totalPages)
+                {
+                    <li lass="page-item"><a class="page-link" href="?page=@(page+1)&keyword=@keyword">Next</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+

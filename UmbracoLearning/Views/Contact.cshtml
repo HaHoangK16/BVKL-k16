@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@{
+    Layout = "WebbaseTemplate.cshtml";
+}
+
+@* the fun starts here *@
+
+
+<div class="container">
+    @if (TempData["ContactUsSuccess"] != null && (bool)TempData["ContactUsSuccess"])
+    {
+        <h2>Thank you for your message. We will be contacting you soon.</h2>
+    }
+    else
+    {
+        Html.RenderAction("RenderContact", "Contact");
+    }
+</div>
+
